@@ -69,8 +69,8 @@ function map_density_naive(atoms, coords, masses, widths, box_min, box_max, Δ)
 
     for (atom, (x0, y0, z0)) in zip(atoms, eachcol(coords))
         a = widths[atom]
-        c = masses[atom] * (√π / a)^3
-        a2 = a^2
+        c = masses[atom] / (a * √π)^3
+        am2 = 1 / a^2
 
         for (ix, x) in enumerate(x_range),
             (iy, y) in enumerate(y_range),
@@ -78,7 +78,7 @@ function map_density_naive(atoms, coords, masses, widths, box_min, box_max, Δ)
 
             r2 = (x - x0)^2 + (y - y0)^2 + (z - z0)^2
 
-            cube_data[iz, iy, ix] += c * exp(-a2 * r2)
+            cube_data[iz, iy, ix] += c * exp(-am2 * r2)
         end
     end
 
