@@ -67,7 +67,7 @@ function map_density_naive(atoms, coords, masses, widths, box_min, box_max, Δ)
         length(y_range),
         length(x_range))
 
-    for (atom, (x0, y0, z0)) in zip(atoms, eachcol(coords))
+    @fastmath @inbounds for (atom, (x0, y0, z0)) in zip(atoms, eachcol(coords))
         a = widths[atom]
         c = masses[atom] / (a * √π)^3
         am2 = 1 / a^2
