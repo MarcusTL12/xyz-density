@@ -1,4 +1,7 @@
 using Printf
+using StaticArrays
+
+include("partitioning.jl")
 
 periodic_table = """
 H                                                                                            He
@@ -37,7 +40,7 @@ function parse_xyz(filename)
         popfirst!(lines)
 
         atoms = zeros(Int, n)
-        coords = zeros(3, n)
+        coords = [(0.0, 0.0, 0.0) for _ in 1:n]
 
         for (i, l) in zip(1:n, lines)
             atom, x, y, z = eachsplit(l)
@@ -48,9 +51,7 @@ function parse_xyz(filename)
                 parse(Int, atom)
             end
 
-            coords[1, i] = parse(Float64, x) * Å2B
-            coords[2, i] = parse(Float64, y) * Å2B
-            coords[3, i] = parse(Float64, z) * Å2B
+            coords[i] = parse.(Float64, (x, y, z)) .* Å2B
         end
 
         atoms, coords
