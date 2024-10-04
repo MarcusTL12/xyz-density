@@ -86,12 +86,12 @@ function map_density_naive(atoms, coords, masses, widths, box_min, box_max, Δ)
     (x_range, y_range, z_range), cube_data
 end
 
-function write_cube_file(filename, atoms, coords, ranges, cube_data,
-    print_geometry=false)
+function write_cube_file(filename, ranges, cube_data,
+    atoms=nothing, coords=nothing)
     open(filename, "w") do io
         println(io, "Atomic density\n")
 
-        if print_geometry
+        if !isnothing(atoms)
             @printf io "%10d" length(atoms)
         else
             @printf io "%10d" 0
@@ -108,7 +108,7 @@ function write_cube_file(filename, atoms, coords, ranges, cube_data,
         @printf(io, "%10d %13.6f %13.6f %13.6f\n",
             length(ranges[1]), 0.0, 0.0, step(ranges[3]))
 
-        if print_geometry
+        if !isnothing(atoms)
             for (atom, r) in zip(atoms, eachcol(coords))
                 @printf(io, "%10d %13.6f %13.6f %13.6f %13.6f\n",
                     atom, 0.0, r...)
